@@ -97,5 +97,5 @@ for i in range(args.max_iterations):
 
 results.write(res)
 results.close()
-title = OUTPUT_TITLE+str(args.board_width)+'W-'+str(args.pixel_width)+"P-"+str(args.num_nails)+'N-'+str(args.max_iterations)+'-'+str(LINE_TRANSPARENCY)+'.png'
+title = OUTPUT_TITLE+str(args.board_width)+'W-'+str(args.pixel_width)+"P-"+str(args.num_nails)+'N-'+str(args.max_iterations)+'-'+str(args.line_transparancy)+'.png'
 base.save(title)
