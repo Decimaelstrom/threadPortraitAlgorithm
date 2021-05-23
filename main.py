@@ -13,19 +13,19 @@ from argparse import ArgumentParser as AP
 parser = AP(description='Thread-Art Conversion Algorithm: converts image into thread art instructions')
 
 # args = sys.argv
-parser.add_argument('--board_width', '-w', const=BOARD_WIDTH, type=int, default=58, help='--width=<num> board width in CM')
-parser.add_argument('--pixel_width', '-p', const=PIXEL_WIDTH, type=float, default=1, help='--pix=<num> ex: 1 - suggest keeping this constant and changing board width only')
-parser.add_argument('--line_transparancy', '-t', const=LINE_TRANSPARENCY, type=float, choices=range(0,1), default=0.2, help='--trans=<value between 0 and 1>')
-parser.add_argument('--num_nails', '-n', const=NUM_NAILS, type=int, default=300, help='--nails=300')
-parser.add_argument('--max_iterations', '-i', const=MAX_ITERATIONS, type=int, default=4000, help='--iterations=4000')
-parser.add_argument('--image_file', '-f', const=IMAGE_FILE, type=str, default='image.jpg', help='--src_image=image.jpg')
+parser.add_argument('--board_width', '-w', type=int, default=58, help='--width=<num> board width in CM')
+parser.add_argument('--pixel_width', '-p', type=float, default=1, help='--pix=<num> ex: 1 - suggest keeping this constant and changing board width only')
+parser.add_argument('--line_transparancy', '-t', type=float, choices=range(0,1), default=0.2, help='--trans=<value between 0 and 1>')
+parser.add_argument('--num_nails', '-n', type=int, default=300, help='--nails=300')
+parser.add_argument('--max_iterations', '-i',  type=int, default=4000, help='--iterations=4000')
+parser.add_argument('--image_file', '-f',  type=str, default='image.jpg', help='--image_file=image.jpg')
 args = parser.parse_args()
 print('these are the args')
 print(args)
 NAILS_SKIP = 10
 OUTPUT_TITLE = "output"
 
-pixels = int(BOARD_WIDTH/PIXEL_WIDTH)
+pixels = int(args.board_width/args.pixel_width)
 size = (pixels+1, pixels+1)
 
 def cropToCircle(path):
@@ -42,15 +42,15 @@ def cropToCircle(path):
     return output
 
 #Cropping image to a circle
-ref = cropToCircle(IMAGE_FILE)
+ref = cropToCircle(args.image_file)
 
 base = Image.new('L', size, color=255)
 
 #Calculating pixels and setting up nail perimeter
-angles = np.linspace(0, 2*np.pi, NUM_NAILS)  # angles to the dots
-cx, cy = (BOARD_WIDTH/2/PIXEL_WIDTH, BOARD_WIDTH/2/PIXEL_WIDTH)  # center of circle
-xs = cx + BOARD_WIDTH*0.5*np.cos(angles)/PIXEL_WIDTH
-ys = cy + BOARD_WIDTH*0.5*np.sin(angles)/PIXEL_WIDTH
+angles = np.linspace(0, 2*np.pi, args.num_nails)  # angles to the dots
+cx, cy = (args.board_width/2/args.pixel_width, args.board_width/2/args.pixel_width)  # center of circle
+xs = cx + args.board_width*0.5*np.cos(angles)/args.pixel_width
+ys = cy + args.board_width*0.5*np.sin(angles)/args.pixel_width
 nails = list(map(lambda x,y: (int(x),int(y)), xs,ys))
 results = open("results.txt", "w")
 res = ""
@@ -63,12 +63,12 @@ cur_nail = 1        #start at arbitrary nail
 ref_arr = np.transpose(np.array(ref)[:, :, 0])
 base_arr = base.load()
 
-for i in range(MAX_ITERATIONS):
+for i in range(args.max_iterations):
     best_line = None
     new_nail = None
     min_avg_value = 10000
     for n in range(cur_nail+1+NAILS_SKIP,cur_nail+len(nails)-NAILS_SKIP):
-        n = n%NUM_NAILS
+        n = n%args.num_nails
         tmp_value = 0
         new_line = line(nails[cur_nail][0], nails[cur_nail][1], nails[n][0], nails[n][1])
         num_pts = len(new_line[0])
@@ -83,7 +83,7 @@ for i in range(MAX_ITERATIONS):
 
     #Uncomment for progress pictures every x=200 iterations
     #if i%200 == 0:
-    #    title = OUTPUT_TITLE+str(BOARD_WIDTH)+'W-'+str(PIXEL_WIDTH)+"P-"+str(NUM_NAILS)+'N-'+str(i)+'-'+str(LINE_TRANSPARENCY)+'.png'
+    #    title = OUTPUT_TITLE+str(args.board_width)+'W-'+str(args.pixel_width)+"P-"+str(args.num_nails)+'N-'+str(i)+'-'+str(LINE_TRANSPARENCY)+'.png'
     #    print(title)
     #    base.save(title)
     #    res += "\n --- "+str(i)+" --- \n"
@@ -97,5 +97,5 @@ for i in range(MAX_ITERATIONS):
 
 results.write(res)
 results.close()
-title = OUTPUT_TITLE+str(BOARD_WIDTH)+'W-'+str(PIXEL_WIDTH)+"P-"+str(NUM_NAILS)+'N-'+str(MAX_ITERATIONS)+'-'+str(LINE_TRANSPARENCY)+'.png'
+title = OUTPUT_TITLE+str(args.board_width)+'W-'+str(args.pixel_width)+"P-"+str(args.num_nails)+'N-'+str(args.max_iterations)+'-'+str(LINE_TRANSPARENCY)+'.png'
 base.save(title)
