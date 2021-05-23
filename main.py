@@ -4,16 +4,21 @@ from skimage.color import rgb2gray
 from skimage.draw import line
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
+# import sys
+from argparse import ArgumentParser as AP
+
 
 #GET INPUT CONSTANTS HERE
 
-args = sys.argv
-BOARD_WIDTH = int(args[1])          #CM
-PIXEL_WIDTH = float(args[2])        #ex: 1 - suggest keeping this constant and changing board width only
-LINE_TRANSPARENCY = float(args[3])  #value between 0 to 1
-NUM_NAILS = int(args[4])            #ex: 300
-MAX_ITERATIONS = int(args[5])       #ex: 4000
+parser = AP(description='Thread-Art Conversion Algorithm: converts image into thread art instructions')
+
+# args = sys.argv
+parser.add_argument('--board_width', '-w', dest='BOARD_WIDTH', type=int, default=58, help='--width=<num> board width in CM')
+parser.add_argument('--pixel_width', '-p', dest='PIXEL_WIDTH', type=float, default=1, help='--pix=<num> ex: 1 - suggest keeping this constant and changing board width only')
+parser.add_argument('--line_transparancy', '-t', dest='LINE_TRANSPARENCY', type=float, choices=range(0,1), default=0.2, help='--trans=<value between 0 and 1>')
+parser.add_argument('--num_nails', '-n', dest='NUM_NAILS', type=int, default=300, help='--nails=300')
+parser.add_argument('--max_iterations', '-i', dest='MAX_ITERATIONS', type=int, default=4000, help='--iterations=4000')
+parser.add_argument('--image_file', '-f', dest='IMAGE_FILE', type=file, default='image.jpg', help='--src_image=image.jpg')
 NAILS_SKIP = 10
 OUTPUT_TITLE = "output"
 
@@ -34,7 +39,7 @@ def cropToCircle(path):
     return output
 
 #Cropping image to a circle
-ref = cropToCircle("image.jpg")
+ref = cropToCircle(IMAGE_FILE)
 
 base = Image.new('L', size, color=255)
 
