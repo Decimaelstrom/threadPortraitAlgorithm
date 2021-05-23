@@ -13,12 +13,12 @@ from argparse import ArgumentParser as AP
 parser = AP(description='Thread-Art Conversion Algorithm: converts image into thread art instructions')
 
 # args = sys.argv
-parser.add_argument('--board_width', '-w', type=int, default=58, help='--width=<num> board width in CM')
-parser.add_argument('--pixel_width', '-p', type=float, default=1, help='--pix=<num> ex: 1 - suggest keeping this constant and changing board width only')
-parser.add_argument('--line_transparancy', '-t', type=float, choices=range(0,1), default=0.2, help='--trans=<value between 0 and 1>')
-parser.add_argument('--num_nails', '-n', type=int, default=300, help='--nails=300')
-parser.add_argument('--max_iterations', '-i',  type=int, default=4000, help='--iterations=4000')
-parser.add_argument('--image_file', '-f',  type=str, default='image.jpg', help='--image_file=image.jpg')
+parser.add_argument('--board_width', '-w', type=int, default=58, help='board width in CM (default 58)')
+parser.add_argument('--pixel_width', '-p', type=float, default=1, help='ex: 1 - suggest keeping this constant and changing board width only (default 1)')
+parser.add_argument('--line_transparancy', '-t', type=float, default=0.2, help='value between 0 and 1 (default 0.2)')
+parser.add_argument('--num_nails', '-n', type=int, default=300, help='number of nails (default:300)')
+parser.add_argument('--max_iterations', '-i',  type=int, default=4000, help='number of iterations (default 4000)')
+parser.add_argument('--image_file', '-f',  type=str, default='image.jpg', help='source image file to transform (default "image.jpg")')
 args = parser.parse_args()
 print('these are the args')
 print(args)
