@@ -20,8 +20,6 @@ parser.add_argument('--num_nails', '-n', type=int, default=300, help='number of 
 parser.add_argument('--max_iterations', '-i',  type=int, default=4000, help='number of iterations (default 4000)')
 parser.add_argument('--image_file', '-f',  type=str, default='image.jpg', help='source image file to transform (default "image.jpg")')
 args = parser.parse_args()
-print('these are the args')
-print(args)
 NAILS_SKIP = 10
 OUTPUT_TITLE = "output"
 
@@ -56,8 +54,8 @@ results = open("results.txt", "w")
 res = ""
 
 #Uncomment to show nails plot
-#plt.scatter(xs, ys, c = 'red', s=2)
-#plt.show()
+plt.scatter(xs, ys, c = 'red', s=2)
+plt.show()
 
 cur_nail = 1        #start at arbitrary nail
 ref_arr = np.transpose(np.array(ref)[:, :, 0])
